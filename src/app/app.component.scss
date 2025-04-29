@@ -1,0 +1,45 @@
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+
+  h1 {
+    color: #2c3e50;
+  }
+
+  .instructions {
+    margin-top: 20px;
+
+    h2 {
+      color: #34495e;
+    }
+
+    ul {
+      padding-left: 20px;
+
+      li {
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  .start-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #2980b9;
+    }
+  }
+}
