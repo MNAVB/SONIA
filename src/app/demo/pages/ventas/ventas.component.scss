@@ -1,0 +1,41 @@
+@import '../../../../scss/settings/color-variables.scss';
+
+.ventas-container {
+  .card {
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+      background-color: transparent;
+      border-bottom: 1px solid var(--bs-border-color);
+    }
+
+    .card-body {
+      padding: 1.25rem;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .custom-section {
+    padding: 1rem;
+    background-color: $white;
+    border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .badge-circle {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+}

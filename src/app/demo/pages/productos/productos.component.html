@@ -1,0 +1,132 @@
+<div class="productos-container row">
+    <!-- Columna del Formulario -->
+    <div class="col-md-5">
+        <app-card [cardTitle]="editando ? 'Editar Producto' : 'Nuevo Producto'">
+            <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()" class="formulario-producto">
+                <!-- Campo de nombre -->
+                <div class="form-group">
+                    <label for="nombre">Nombre del producto</label>
+                    <input
+                            id="nombre"
+                            type="text"
+                            class="form-control"
+                            formControlName="nombre"
+                            [ngClass]="{'is-invalid': productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched}"
+                            placeholder="Ingrese el nombre del producto"
+                    >
+                    <div class="invalid-feedback" *ngIf="productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched">
+                        El nombre del producto es obligatorio
+                    </div>
+                </div>
+
+                <!-- Campo de descripción -->
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <textarea
+                            id="descripcion"
+                            class="form-control"
+                            rows="3"
+                            formControlName="descripcion"
+                            placeholder="Ingrese una descripción"
+                    ></textarea>
+                </div>
+
+                <!-- Campo de precio -->
+                <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input
+                            id="precio"
+                            type="number"
+                            class="form-control"
+                            formControlName="precio"
+                            placeholder="Ingrese el precio"
+                    >
+                </div>
+
+                <!-- Campo de categoría -->
+                <div class="form-group">
+                    <label for="categoria">Categoría</label>
+                    <input
+                            id="categoria"
+                            type="text"
+                            class="form-control"
+                            formControlName="categoria"
+                            placeholder="Ingrese la categoría"
+                    >
+                </div>
+
+                <!-- Campo de imagen -->
+                <div class="form-group">
+                    <label for="imagen">URL de la imagen</label>
+                    <input
+                            id="imagen"
+                            type="text"
+                            class="form-control"
+                            formControlName="imagen"
+                            placeholder="Ingrese la URL de la imagen"
+                    >
+                </div>
+
+                <!-- Campo de stock -->
+                <div class="form-group">
+                    <label for="stock">Stock</label>
+                    <input
+                            id="stock"
+                            type="number"
+                            class="form-control"
+                            formControlName="stock"
+                            placeholder="Ingrese la cantidad en stock"
+                    >
+                </div>
+
+                <!-- Botones -->
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        {{ editando ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                    <button *ngIf="editando" type="button" class="btn btn-secondary" (click)="cancelarEdicion()">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </app-card>
+    </div>
+
+    <!-- Columna de la Lista de Productos -->
+    <div class="col-md-7">
+        <app-card cardTitle="Listado de Productos">
+            <div class="tabla-productos table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Categoría</th>
+                        <th>Stock</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngIf="productos.length === 0">
+                        <td colspan="5" class="text-center">No hay productos registrados</td>
+                    </tr>
+                    <tr *ngFor="let producto of productos; let i = index">
+                        <td>{{ producto.nombre }}</td>
+                        <td>{{ producto.precio | currency:'USD' }}</td>
+                        <td>{{ producto.categoria }}</td>
+                        <td>{{ producto.stock }}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-primary me-2" (click)="editarProducto(i)">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" (click)="eliminarProducto(i)">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div>
+</div>

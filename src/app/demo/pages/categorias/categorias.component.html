@@ -1,0 +1,94 @@
+<div class="categorias-container row">
+    <!-- Columna del Formulario -->
+    <div class="col-md-5">
+        <app-card [cardTitle]="editando ? 'Editar Categoría' : 'Nueva Categoría'">
+            <form [formGroup]="categoriaForm" (ngSubmit)="guardarCategoria()" class="formulario-categoria">
+                <!-- Campo de nombre -->
+                <div class="form-group">
+                    <label for="nombre">Nombre de categoría</label>
+                    <input
+                            id="nombre"
+                            type="text"
+                            class="form-control"
+                            formControlName="nombre"
+                            [ngClass]="{'is-invalid': categoriaForm.get('nombre')?.invalid && categoriaForm.get('nombre')?.touched}"
+                            placeholder="Ingrese el nombre de la categoría"
+                    >
+                    <div class="invalid-feedback" *ngIf="categoriaForm.get('nombre')?.invalid && categoriaForm.get('nombre')?.touched">
+                        El nombre de categoría es obligatorio
+                    </div>
+                </div>
+
+                <!-- Campo de descripción -->
+                <div class="form-group">
+                    <label for="descripcion">Descripción (opcional)</label>
+                    <textarea
+                            id="descripcion"
+                            class="form-control"
+                            rows="3"
+                            formControlName="descripcion"
+                            placeholder="Ingrese una descripción"
+                    ></textarea>
+                </div>
+
+                <!-- Campo de código -->
+                <div class="form-group">
+                    <label for="codigo">Código (opcional)</label>
+                    <input
+                            id="codigo"
+                            type="text"
+                            class="form-control"
+                            formControlName="codigo"
+                            placeholder="Ingrese un código"
+                    >
+                </div>
+
+                <!-- Botones -->
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        {{ editando ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                    <button *ngIf="editando" type="button" class="btn btn-secondary" (click)="cancelarEdicion()">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </app-card>
+    </div>
+
+    <!-- Columna de la Lista de Categorías -->
+    <div class="col-md-7">
+        <app-card cardTitle="Listado de Categorías">
+            <div class="tabla-categorias table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngIf="categorias.length === 0">
+                        <td colspan="4" class="text-center">No hay categorías registradas</td>
+                    </tr>
+                    <tr *ngFor="let categoria of categorias; let i = index">
+                        <td>{{ categoria.nombre }}</td>
+                        <td>{{ categoria.codigo || 'N/A' }}</td>
+                        <td>{{ categoria.descripcion || 'Sin descripción' }}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-primary me-2" (click)="editarCategoria(i)">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" (click)="eliminarCategoria(i)">
+                                <i class="fas fa-trash-alt"></i> Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+<ul class="list-unstyled">
+  <!-- Se eliminaron el ícono de GitHub y las notificaciones -->
+  <li class="dropdown pc-h-item header-user-profile" ngbDropdown>
+    <a class="pc-head-link dropdown-toggle arrow-none me-0" ngbDropdownToggle>
+      <img src="assets/images/user/avatar-2.jpg" alt="user-image" class="user-avatar me-2" />
+      <span class="f-w-600">{{ username }}</span>
+    </a>
+    <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown" ngbDropdownMenu>
+      <div class="dropdown-header">
+        <div class="d-flex mb-1">
+          <div class="flex-shrink-0">
+            <img src="assets/images/user/avatar-2.jpg" alt="user-image" class="user-avatar wid-35" />
+          </div>
+          <div class="flex-grow-1 ms-3 text-start">
+            <h5 class="mb-0">{{ username }}</h5>
+            <span>D-ZORIA BOUTIQUE</span>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown-divider"></div>
+      <div>
+        <a class="dropdown-item" (click)="changeUsername()">
+          <i class="text-muted" antIcon theme="outline" type="edit"></i>
+          <span>Cambiar nombre de usuario</span>
+        </a>
+      </div>
+      <div>
+        <a class="dropdown-item" (click)="logout()">
+          <i class="text-muted" antIcon theme="outline" type="logout"></i>
+          <span>Cerrar sesión</span>
+        </a>
+      </div>
+    </div>
+  </li>
+</ul>

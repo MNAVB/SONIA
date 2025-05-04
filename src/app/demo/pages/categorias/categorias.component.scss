@@ -1,0 +1,115 @@
+@import '../../../../scss/settings/color-variables.scss';
+
+.categorias-container {
+  .formulario-categoria {
+    padding: 1.5rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #ececec;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    .form-group {
+      margin-bottom: 1rem;
+
+      label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+
+      input,
+      textarea {
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        padding: 0.5rem 0.75rem;
+        font-size: 1rem;
+        background-color: #f8f9fa;
+        color: #495057;
+        transition: border-color 0.2s;
+
+        &:focus {
+          border-color: #80bdff;
+          outline: none;
+          background-color: #ffffff;
+        }
+      }
+
+      .is-invalid {
+        border-color: #dc3545;
+      }
+
+      .invalid-feedback {
+        color: #dc3545;
+        font-size: 0.875rem;
+      }
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+
+      &.btn-primary {
+        background-color: #007bff;
+        border: none;
+
+        &:hover {
+          background-color: #0069d9;
+        }
+      }
+
+      &.btn-secondary {
+        background-color: #6c757d;
+        border: none;
+
+        &:hover {
+          background-color: #5a6268;
+        }
+      }
+    }
+  }
+
+  .tabla-categorias {
+    .table {
+      margin-bottom: 0;
+
+      th {
+        font-weight: 600;
+        color: #495057;
+      }
+
+      td {
+        vertical-align: middle;
+      }
+
+      .btn {
+        font-size: 0.875rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+
+        &.btn-outline-primary {
+          color: #007bff;
+          border-color: #007bff;
+
+          &:hover {
+            background-color: #007bff;
+            color: #ffffff;
+          }
+        }
+
+        &.btn-outline-danger {
+          color: #dc3545;
+          border-color: #dc3545;
+
+          &:hover {
+            background-color: #dc3545;
+            color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+}
+
