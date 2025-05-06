@@ -1,29 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CardComponent } from 'src/app/theme/shared/components/card/card.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { ConfirmDialogComponent } from 'src/app/theme/shared/confirm-dialog/confirm-dialog.component';
-
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CategoriaService, Categoria } from 'src/app/core/services/pages-service/categoria.service';
+import { CardComponent } from '../../../theme/shared/components/card/card.component';
 @Component({
   selector: 'app-categorias',
   standalone: true,
-  imports: [CommonModule, CardComponent, ReactiveFormsModule, MatDialogModule, MatIconModule, ConfirmDialogComponent],
+  imports: [CommonModule, ReactiveFormsModule, CardComponent],
   templateUrl: './categorias.component.html',
   styleUrls: ['./categorias.component.scss']
 })
-export class CategoriasComponent {
+export class CategoriasComponent implements OnInit {
   categoriaForm: FormGroup;
-  categorias: any[] = [];
+  categoriasArray: Categoria[] = [];
   editando: boolean = false;
-  categoriaSeleccionada: number | null = null;
+  categoriaEditandoId: string | null = null;
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog) {
+  constructor(
+      private fb: FormBuilder,
+      private categoriaService: CategoriaService
+  ) {
     this.categoriaForm = this.fb.group({
       nombre: ['', Validators.required],
       descripcion: [''],
       codigo: ['']
+    });
+  }
+
+  ngOnInit(): void {
+    this.categoriaService.getCategorias().subscribe(categorias => {
+      this.categoriasArray = categorias;
     });
   }
 
@@ -32,42 +38,37 @@ export class CategoriasComponent {
       this.categoriaForm.markAllAsTouched();
       return;
     }
-
-    if (this.editando && this.categoriaSeleccionada !== null) {
-      this.categorias[this.categoriaSeleccionada] = this.categoriaForm.value;
-      this.editando = false;
-      this.categoriaSeleccionada = null;
+    const categoria: Categoria = this.categoriaForm.value;
+    if (this.editando && this.categoriaEditandoId) {
+      this.categoriaService.updateCategoria(this.categoriaEditandoId, categoria).then(() => {
+        this.cancelarEdicion();
+      });
     } else {
-      this.categorias.push(this.categoriaForm.value);
+      this.categoriaService.addCategoria(categoria).then(() => {
+        this.categoriaForm.reset();
+      });
     }
-
-    this.categoriaForm.reset();
   }
 
-  editarCategoria(index: number) {
+  editarCategoria(categoria: Categoria) {
     this.editando = true;
-    this.categoriaSeleccionada = index;
-    this.categoriaForm.patchValue(this.categorias[index]);
-  }
-
-  eliminarCategoria(index: number) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'Eliminar categoría',
-        message: '¿Está seguro que desea eliminar esta categoría?'
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.categorias.splice(index, 1);
-      }
+    this.categoriaEditandoId = categoria.id || null;
+    this.categoriaForm.patchValue({
+      nombre: categoria.nombre,
+      descripcion: categoria.descripcion,
+      codigo: categoria.codigo
     });
   }
 
   cancelarEdicion() {
     this.editando = false;
-    this.categoriaSeleccionada = null;
+    this.categoriaEditandoId = null;
     this.categoriaForm.reset();
+  }
+
+  eliminarCategoria(categoria: Categoria) {
+    if (categoria.id) {
+      this.categoriaService.deleteCategoria(categoria.id);
+    }
   }
 }

@@ -1,32 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ProductosService, Producto } from 'src/app/core/services/pages-service/productos.service';
 import { CardComponent } from 'src/app/theme/shared/components/card/card.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { ConfirmDialogComponent } from 'src/app/theme/shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, CardComponent, ReactiveFormsModule, MatDialogModule, MatIconModule, ConfirmDialogComponent],
+  imports: [CommonModule, ReactiveFormsModule, CardComponent],
   templateUrl: './productos.component.html',
   styleUrls: ['./productos.component.scss']
 })
-export class ProductosComponent {
+export class ProductosComponent implements OnInit {
   productoForm: FormGroup;
-  productos: any[] = [];
+  productos: Producto[] = [];
   editando: boolean = false;
-  productoSeleccionado: number | null = null;
+  productoEditandoId: string | null = null;
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog) {
+  constructor(
+      private fb: FormBuilder,
+      private productosService: ProductosService
+  ) {
     this.productoForm = this.fb.group({
-      nombre: ['', Validators.required],
-      descripcion: [''],
-      precio: [0, Validators.required],
-      categoria: [''],
-      stock: [0, Validators.required],
-      imagen: ['']
+      categoria: ['', Validators.required],
+      imagen: [''],
+      stock: [0, Validators.required]
+    });
+  }
+
+  ngOnInit(): void {
+    this.productosService.getProductos().subscribe(productos => {
+      this.productos = productos;
     });
   }
 
@@ -35,44 +39,37 @@ export class ProductosComponent {
       this.productoForm.markAllAsTouched();
       return;
     }
-
-    if (this.editando && this.productoSeleccionado !== null) {
-      this.productos[this.productoSeleccionado] = this.productoForm.value;
-      this.editando = false;
-      this.productoSeleccionado = null;
+    const producto: Producto = this.productoForm.value;
+    if (this.editando && this.productoEditandoId) {
+      this.productosService.updateProducto(this.productoEditandoId, producto).then(() => {
+        this.cancelarEdicion();
+      });
     } else {
-      this.productos.push(this.productoForm.value);
-      this.productos = [...this.productos];
+      this.productosService.addProducto(producto).then(() => {
+        this.productoForm.reset();
+      });
     }
-
-    this.productoForm.reset();
   }
 
-  editarProducto(index: number) {
+  editarProducto(producto: Producto) {
     this.editando = true;
-    this.productoSeleccionado = index;
-    this.productoForm.patchValue(this.productos[index]);
-  }
-
-  eliminarProducto(index: number) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'Eliminar producto',
-        message: '¿Está seguro que desea eliminar este producto?'
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.productos.splice(index, 1);
-        this.productos = [...this.productos];
-      }
+    this.productoEditandoId = producto.id || null;
+    this.productoForm.patchValue({
+      categoria: producto.categoria,
+      imagen: producto.imagen,
+      stock: producto.stock
     });
   }
 
   cancelarEdicion() {
     this.editando = false;
-    this.productoSeleccionado = null;
+    this.productoEditandoId = null;
     this.productoForm.reset();
+  }
+
+  eliminarProducto(producto: Producto) {
+    if (producto.id) {
+      this.productosService.deleteProducto(producto.id);
+    }
   }
 }

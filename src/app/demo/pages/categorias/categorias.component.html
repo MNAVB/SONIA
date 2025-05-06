@@ -70,18 +70,18 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngIf="categorias.length === 0">
+                    <tr *ngIf="categoriasArray.length === 0">
                         <td colspan="4" class="text-center">No hay categorías registradas</td>
                     </tr>
-                    <tr *ngFor="let categoria of categorias; let i = index">
+                    <tr *ngFor="let categoria of categoriasArray">
                         <td>{{ categoria.nombre }}</td>
                         <td>{{ categoria.codigo || 'N/A' }}</td>
                         <td>{{ categoria.descripcion || 'Sin descripción' }}</td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-outline-primary me-2" (click)="editarCategoria(i)">
+                            <button class="btn btn-sm btn-outline-primary me-2" (click)="editarCategoria(categoria)">
                                 <i class="fas fa-edit"></i> Editar
                             </button>
-                            <button class="btn btn-sm btn-outline-danger" (click)="eliminarCategoria(i)">
+                            <button class="btn btn-sm btn-outline-danger" (click)="eliminarCategoria(categoria)">
                                 <i class="fas fa-trash-alt"></i> Eliminar
                             </button>
                         </td>
