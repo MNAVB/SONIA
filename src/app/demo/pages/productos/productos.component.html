@@ -4,49 +4,44 @@
         <app-card [cardTitle]="editando ? 'Editar Producto' : 'Nuevo Producto'">
             <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()" class="formulario-producto">
                 <!-- Campo de categoría -->
-                <div class="form-group">
-                    <label for="categoria">Categoría</label>
+                <div class="mb-3">
+                    <label for="categoria" class="form-label">Categoría</label>
                     <input
                             id="categoria"
                             type="text"
                             class="form-control"
                             formControlName="categoria"
+                            [matAutocomplete]="auto"
                             [ngClass]="{'is-invalid': productoForm.get('categoria')?.invalid && productoForm.get('categoria')?.touched}"
-                            placeholder="Ingrese la categoría"
+                            placeholder="Ej: Hogar, Zapatos"
                     >
+                    <mat-autocomplete #auto="matAutocomplete" panelClass="inline-autocomplete" (optionSelected)="seleccionarCategoria($event.option.value)">
+                        <mat-option *ngFor="let cat of categoriasFiltradas" [value]="cat.nombre">
+                            {{ cat.nombre }}
+                        </mat-option>
+                    </mat-autocomplete>
                     <div class="invalid-feedback" *ngIf="productoForm.get('categoria')?.invalid && productoForm.get('categoria')?.touched">
                         La categoría es obligatoria
                     </div>
                 </div>
-
-                <!-- Campo de imagen -->
-                <div class="form-group">
-                    <label for="imagen">URL de la imagen</label>
-                    <input
-                            id="imagen"
-                            type="text"
-                            class="form-control"
-                            formControlName="imagen"
-                            placeholder="Ingrese la URL de la imagen"
-                    >
-                </div>
-
                 <!-- Campo de stock -->
                 <div class="form-group">
                     <label for="stock">Stock</label>
-                    <input
-                            id="stock"
-                            type="number"
-                            class="form-control"
-                            formControlName="stock"
-                            [ngClass]="{'is-invalid': productoForm.get('stock')?.invalid && productoForm.get('stock')?.touched}"
-                            placeholder="Ingrese la cantidad en stock"
-                    >
+                    <div class="input-group">
+                        <input
+                                id="stock"
+                                type="number"
+                                class="form-control"
+                                formControlName="stock"
+                                [ngClass]="{'is-invalid': productoForm.get('stock')?.invalid && productoForm.get('stock')?.touched}"
+                                placeholder="Ingrese el monto en stock"
+                                min="0"
+                        >
+                    </div>
                     <div class="invalid-feedback" *ngIf="productoForm.get('stock')?.invalid && productoForm.get('stock')?.touched">
                         El stock es obligatorio
                     </div>
                 </div>
-
                 <!-- Botones -->
                 <div class="d-flex gap-2 mt-3">
                     <button type="submit" class="btn btn-primary">
@@ -54,6 +49,9 @@
                     </button>
                     <button *ngIf="editando" type="button" class="btn btn-secondary" (click)="cancelarEdicion()">
                         Cancelar
+                    </button>
+                    <button type="button" class="btn btn-warning" (click)="limpiarFormulario()">
+                        Limpiar datos
                     </button>
                 </div>
             </form>
@@ -68,21 +66,16 @@
                     <thead class="table-light">
                     <tr>
                         <th>Categoría</th>
-                        <th>Imagen</th>
                         <th>Stock</th>
                         <th class="text-center">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngIf="productos.length === 0">
-                        <td colspan="4" class="text-center">No hay productos registrados</td>
+                        <td colspan="3" class="text-center">No hay productos registrados</td>
                     </tr>
                     <tr *ngFor="let producto of productos; let i = index">
                         <td>{{ producto.categoria }}</td>
-                        <td>
-                            <img *ngIf="producto.imagen" [src]="producto.imagen" alt="Imagen" style="max-width: 60px; max-height: 60px;">
-                            <span *ngIf="!producto.imagen">Sin imagen</span>
-                        </td>
                         <td>{{ producto.stock }}</td>
                         <td class="text-center">
                             <button class="btn btn-sm btn-outline-primary me-2" (click)="editarProducto(producto)">

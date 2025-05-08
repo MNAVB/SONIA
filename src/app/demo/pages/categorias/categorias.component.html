@@ -31,18 +31,6 @@
                     ></textarea>
                 </div>
 
-                <!-- Campo de código -->
-                <div class="form-group">
-                    <label for="codigo">Código (opcional)</label>
-                    <input
-                            id="codigo"
-                            type="text"
-                            class="form-control"
-                            formControlName="codigo"
-                            placeholder="Ingrese un código"
-                    >
-                </div>
-
                 <!-- Botones -->
                 <div class="d-flex gap-2 mt-3">
                     <button type="submit" class="btn btn-primary">
@@ -50,6 +38,9 @@
                     </button>
                     <button *ngIf="editando" type="button" class="btn btn-secondary" (click)="cancelarEdicion()">
                         Cancelar
+                    </button>
+                    <button type="button" class="btn btn-warning" (click)="limpiarFormulario()">
+                        Limpiar datos
                     </button>
                 </div>
             </form>

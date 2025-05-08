@@ -21,21 +21,15 @@
     }
   }
 
-  .form-group {
+  .form-group, .mb-3 {
     margin-bottom: 1rem;
   }
 
-  .custom-section {
-    padding: 1rem;
-    background-color: $white;
-    border-radius: 0.25rem;
-    margin-bottom: 1.5rem;
+  .tabla-ventas {
+    margin-top: 1rem;
   }
 
-  .badge-circle {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+  .btn {
+    min-width: 80px;
   }
 }

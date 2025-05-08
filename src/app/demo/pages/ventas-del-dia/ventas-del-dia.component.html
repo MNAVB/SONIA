@@ -1,0 +1,130 @@
+<!-- Botón para listar -->
+<div class="mb-3">
+    <button class="btn btn-primary" (click)="listarVentas()">Listar Ventas del Día</button>
+</div>
+<!-- Bloque 1: Formulario para registrar ventas del día -->
+<div *ngIf="mostrarVentas" class="mb-5">
+    <h4 class="mb-3 border-bottom pb-2">Registrar Ventas del Día</h4>
+    <div *ngFor="let form of ventasForm.controls; let i = index" class="mb-4 shadow-sm p-3 bg-light rounded">
+        <app-card [cardTitle]="ventasPreparadas[i]?.producto">
+            <form [formGroup]="form" (ngSubmit)="guardarVentaDelDia(i)">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label>Producto</label>
+                        <input class="form-control" formControlName="producto" [disabled]="true">
+                    </div>
+                    <div class="col-md-2">
+                        <label>Precio</label>
+                        <input class="form-control" formControlName="precio" [disabled]="true">
+                    </div>
+                    <div class="col-md-2">
+                        <label>Cantidad</label>
+                        <input class="form-control" formControlName="cantidad" [disabled]="true">
+                    </div>
+                    <div class="col-md-2">
+                        <label>Comprador</label>
+                        <input class="form-control" formControlName="comprador">
+                    </div>
+                    <div class="col-md-2">
+                        <label>Celular</label>
+                        <input class="form-control" formControlName="celular">
+                    </div>
+                    <div class="col-md-2">
+                        <label>Estado</label>
+                        <select class="form-select" formControlName="estado">
+                            <option value="en_proceso">En Proceso</option>
+                            <option value="vendido">Vendido</option>
+                            <option value="rechazado">Rechazado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-center">
+                        <div class="form-check mt-4">
+                            <input type="checkbox" class="form-check-input" formControlName="pagoConfirmado">
+                            <label class="form-check-label">Pago</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-success mt-4">Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </app-card>
+    </div>
+</div>
+
+<!-- Bloque 2: Resumen de ventas guardadas -->
+<div *ngIf="ventasDelDiaGuardadas.length > 0">
+    <h4 class="mb-3 border-bottom pb-2">Resumen de Compradores</h4>
+    <div class="table-responsive shadow-sm rounded p-3 bg-white">
+        <table class="table table-sm table-striped">
+            <thead class="table-primary">
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Comprador</th>
+                <th>Celular</th>
+                <th>Estado</th>
+                <th>Pago</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let venta of ventasDelDiaGuardadas">
+                <td>{{ venta.producto }}</td>
+                <td>S/ {{ venta.precio }}</td>
+                <td>{{ venta.cantidad }}</td>
+
+                <!-- Modo visualización -->
+                <ng-container *ngIf="editandoVentaId !== venta.id">
+                    <td>{{ venta.comprador }}</td>
+                    <td>{{ venta.celular }}</td>
+                    <td>{{ venta.estado | titlecase }}</td>
+                    <td>
+            <span class="badge" [ngClass]="venta.pagoConfirmado ? 'bg-success' : 'bg-secondary'">
+                {{ venta.pagoConfirmado ? 'Confirmado' : 'Pendiente' }}
+            </span>
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-primary me-2" (click)="editarVentaDelDia(venta)">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" (click)="eliminarVentaDelDia(venta.id)">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Modo edición -->
+                <ng-container *ngIf="editandoVentaId === venta.id">
+                    <td colspan="4">
+                        <form [formGroup]="formEdicion" class="row g-2 mb-0">
+                            <div class="col">
+                                <input class="form-control" formControlName="comprador" placeholder="Comprador">
+                            </div>
+                            <div class="col">
+                                <input class="form-control" formControlName="celular" placeholder="Celular">
+                            </div>
+                            <div class="col">
+                                <select class="form-select" formControlName="estado">
+                                    <option value="en_proceso">En Proceso</option>
+                                    <option value="vendido">Vendido</option>
+                                    <option value="rechazado">Rechazado</option>
+                                </select>
+                            </div>
+                            <div class="col d-flex align-items-center">
+                                <input type="checkbox" class="form-check-input me-2" formControlName="pagoConfirmado">
+                                <label class="form-check-label">Pago</label>
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-sm btn-success me-2" type="button" (click)="guardarEdicionVentaDelDia(venta.id!)">Guardar</button>
+                                <button class="btn btn-sm btn-secondary" type="button" (click)="cancelarEdicion()">Cancelar</button>
+                            </div>
+                        </form>
+                    </td>
+                </ng-container>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

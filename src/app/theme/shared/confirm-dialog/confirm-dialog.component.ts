@@ -6,9 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-confirm-dialog',
   standalone: true,
   templateUrl: './confirm-dialog.component.html',
-  imports: [
-    MatIconModule
-  ],
+  imports: [MatIconModule],
   styleUrls: ['./confirm-dialog.component.scss']
 })
 export class ConfirmDialogComponent {

@@ -69,6 +69,15 @@ export const NavigationItems: NavigationItem[] = [
         url: '/ventas',
         icon: 'chrome', // Otro icono disponible
         breadcrumbs: false
+      },
+      {
+        id: 'ventas-del-dia',
+        title: 'Ventas del Día',
+        type: 'item',
+        classes: 'nav-item',
+        url: '/ventas-del-dia',
+        icon: 'chrome', // Puedes cambiar el icono si lo deseas
+        breadcrumbs: false
       }
     ]
   } ,

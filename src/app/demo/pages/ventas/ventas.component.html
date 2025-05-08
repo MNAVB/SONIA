@@ -1,10 +1,103 @@
-<!-- src/app/demo/pages/ventas/ventas.component.html -->
-<div class="row">
-  <div class="col-sm-12">
-    <app-card cardTitle="Ventas">
-      <p>
-        Contenido de la página de ventas.
-      </p>
-    </app-card>
-  </div>
+<div class="ventas-container row">
+    <div class="col-md-4">
+        <app-card [cardTitle]="editando ? 'Editar Venta' : 'Nueva Venta'">
+            <form [formGroup]="ventaForm" (ngSubmit)="guardarVenta()">
+                <!-- Campo Producto -->
+                <div class="mb-3">
+                    <label for="producto" class="form-label">Producto</label>
+                    <input
+                            id="producto"
+                            type="text"
+                            class="form-control"
+                            formControlName="producto"
+                            [matAutocomplete]="auto"
+                            [ngClass]="{'is-invalid': ventaForm.get('producto')?.invalid && ventaForm.get('producto')?.touched}"
+                            placeholder="Buscar producto"
+                    >
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="seleccionarProducto($event.option.value)">
+                        <mat-option *ngFor="let prod of productosFiltrados" [value]="prod.categoria">
+                            {{ prod.categoria }}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <div class="invalid-feedback" *ngIf="ventaForm.get('producto')?.invalid && ventaForm.get('producto')?.touched">
+                        El producto es obligatorio
+                    </div>
+                </div>
+                <!-- Campo Precio -->
+                <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <div class="input-group">
+                        <span class="input-group-text">S/</span>
+                        <input
+                                id="precio"
+                                type="number"
+                                class="form-control"
+                                formControlName="precio"
+                                min="0"
+                                placeholder="Precio unitario"
+                                [ngClass]="{'is-invalid': ventaForm.get('precio')?.invalid && ventaForm.get('precio')?.touched}"
+                        >
+                    </div>
+                    <div class="invalid-feedback" *ngIf="ventaForm.get('precio')?.invalid && ventaForm.get('precio')?.touched">
+                        El precio es obligatorio y debe ser mayor o igual a 0
+                    </div>
+                </div>
+                <!-- Campo Cantidad -->
+                <div class="form-group">
+                    <label for="cantidad">Cantidad</label>
+                    <input
+                            id="cantidad"
+                            type="number"
+                            class="form-control"
+                            formControlName="cantidad"
+                            min="1"
+                            placeholder="Cantidad vendida"
+                            [ngClass]="{'is-invalid': ventaForm.get('cantidad')?.invalid && ventaForm.get('cantidad')?.touched}"
+                    >
+                    <div class="invalid-feedback" *ngIf="ventaForm.get('cantidad')?.invalid && ventaForm.get('cantidad')?.touched">
+                        La cantidad es obligatoria y debe ser mayor a 0
+                    </div>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-primary">{{ editando ? 'Actualizar' : 'Guardar' }}</button>
+                    <button *ngIf="editando" type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+                    <button type="button" class="btn btn-warning" (click)="limpiarFormulario()">Limpiar datos</button>
+                </div>
+            </form>
+        </app-card>
+    </div>
+    <div class="col-md-8">
+        <app-card cardTitle="Listado de Ventas">
+            <div class="tabla-ventas table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngIf="ventas.length === 0">
+                        <td colspan="4" class="text-center">No hay ventas registradas</td>
+                    </tr>
+                    <tr *ngFor="let venta of ventas">
+                        <td>{{ venta.producto }}</td>
+                        <td>S/ {{ venta.precio }}</td>
+                        <td>{{ venta.cantidad }}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-primary me-2" (click)="editarVenta(venta)">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" (click)="eliminarVenta(venta)">
+                                <i class="fas fa-trash-alt"></i> Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div>
 </div>

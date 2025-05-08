@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  padding: 1rem;
+  background-color: #f8f9fa;
+
+  h4 {
+    font-weight: bold;
+    color: #333;
+  }
+
+  table {
+    font-size: 0.875rem;
+
+    th, td {
+      vertical-align: middle;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.4em 0.6em;
+    }
+  }
+
+  app-card {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+  }
+}

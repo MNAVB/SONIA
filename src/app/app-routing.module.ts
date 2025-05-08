@@ -17,12 +17,12 @@ const routes: Routes = [
         // Layout para páginas que requieren autenticación
         path: '',
         component: AdminComponent,
+// ...
         children: [
             {
                 path: 'dashboard',
                 loadComponent: () => import('./demo/dashboard/default/default.component').then((c) => c.DefaultComponent)
             },
-            // Añadir dentro de la sección de AdminComponent, junto a las otras rutas protegidas
             {
                 path: 'categorias',
                 loadComponent: () => import('./demo/pages/categorias/categorias.component').then((c) => c.CategoriasComponent)
@@ -34,8 +34,13 @@ const routes: Routes = [
             {
                 path: 'ventas',
                 loadComponent: () => import('./demo/pages/ventas/ventas.component').then((c) => c.VentasComponent)
+            }, // <-- Agrega la coma aquí
+            {
+                path: 'ventas-del-dia',
+                loadComponent: () => import('./demo/pages/ventas-del-dia/ventas-del-dia.component').then(m => m.VentasDelDiaComponent)
             }
         ]
+// ...
     },
     {
         // Layout para páginas públicas (login/registro)

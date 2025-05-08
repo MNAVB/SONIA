@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoriaService, Categoria } from 'src/app/core/services/pages-service/categoria.service';
 import { CardComponent } from '../../../theme/shared/components/card/card.component';
+
 @Component({
   selector: 'app-categorias',
   standalone: true,
@@ -22,8 +23,7 @@ export class CategoriasComponent implements OnInit {
   ) {
     this.categoriaForm = this.fb.group({
       nombre: ['', Validators.required],
-      descripcion: [''],
-      codigo: ['']
+      descripcion: ['']
     });
   }
 
@@ -33,12 +33,24 @@ export class CategoriasComponent implements OnInit {
     });
   }
 
+  private obtenerSiguienteCodigo(): string {
+    const codigos = this.categoriasArray
+        .map(cat => Number(cat.codigo))
+        .filter(num => !isNaN(num) && num >= 1 && num <= 1000);
+    const maxCodigo = codigos.length > 0 ? Math.max(...codigos) : 0;
+    const siguiente = Math.min(maxCodigo + 1, 1000);
+    return siguiente.toString().padStart(4, '0');
+  }
+
   guardarCategoria() {
     if (this.categoriaForm.invalid) {
       this.categoriaForm.markAllAsTouched();
       return;
     }
     const categoria: Categoria = this.categoriaForm.value;
+    if (!this.editando) {
+      categoria.codigo = this.obtenerSiguienteCodigo();
+    }
     if (this.editando && this.categoriaEditandoId) {
       this.categoriaService.updateCategoria(this.categoriaEditandoId, categoria).then(() => {
         this.cancelarEdicion();
@@ -49,14 +61,16 @@ export class CategoriasComponent implements OnInit {
       });
     }
   }
+  limpiarFormulario() {
+    this.categoriaForm.reset();
+  }
 
   editarCategoria(categoria: Categoria) {
     this.editando = true;
     this.categoriaEditandoId = categoria.id || null;
     this.categoriaForm.patchValue({
       nombre: categoria.nombre,
-      descripcion: categoria.descripcion,
-      codigo: categoria.codigo
+      descripcion: categoria.descripcion
     });
   }
 
