@@ -66,7 +66,8 @@
                 <th>Celular</th>
                 <th>Estado</th>
                 <th>Pago</th>
-                <th>Acciones</th>
+                <th>Fecha</th>
+                <th class="text-center">Acciones</th>
             </tr>
             </thead>
             <tbody>
@@ -85,6 +86,7 @@
                 {{ venta.pagoConfirmado ? 'Confirmado' : 'Pendiente' }}
             </span>
                     </td>
+                    <td>{{ getFechaComoDate(venta.fecha) | date:'short' }}</td>
                     <td class="text-center">
                         <button class="btn btn-sm btn-outline-primary me-2" (click)="editarVentaDelDia(venta)">
                             <i class="fas fa-edit"></i> Editar

@@ -37,6 +37,15 @@ export class VentasDelDiaComponent implements OnInit {
         this.cargarVentasDelDiaGuardadas();
     }
 
+    getFechaComoDate(fecha: Date | any): Date | null {
+        if (fecha && typeof fecha.toDate === 'function') {
+            return fecha.toDate();
+        }
+        if (fecha instanceof Date) {
+            return fecha;
+        }
+        return null;
+    }
 
     listarVentas() {
         if (this.ventasCargadas) {
